@@ -1,8 +1,8 @@
 package skiplist
 
 import (
+	"errors"
 	"fmt"
-	"log"
 )
 
 type basicnote struct {
@@ -15,6 +15,7 @@ type basiclist struct {
 	head *basicnote
 }
 
+//NewBasicList : Init structure for basic Sorted Linked List.
 func NewBasicList() *basiclist {
 	var empty interface{}
 	return &basiclist{head: &basicnote{key: 0, val: empty, nextNode: nil}}
@@ -22,7 +23,7 @@ func NewBasicList() *basiclist {
 
 func (b *basiclist) Insert(key int, value interface{}) {
 	if b.head == nil {
-		log.Println("note is empty")
+		// fmt.Println("note is empty")
 		b.head = &basicnote{key: key, val: value, nextNode: nil}
 	} else {
 		var currentNode *basicnote
@@ -31,33 +32,70 @@ func (b *basiclist) Insert(key int, value interface{}) {
 		var found bool
 		newNode := &basicnote{key: key, val: value, nextNode: nil}
 
-		log.Println("currentNode:", currentNode)
-		for currentNode.nextNode != nil {
+		for {
 			if currentNode.key > key {
 				newNode.nextNode = previouNote.nextNode
 				previouNote.nextNode = newNode
-				log.Println("insert node currentNode:", currentNode)
 				found = true
-				return
+				break
 			}
+
+			if currentNode.nextNode == nil {
+				break
+			}
+
 			previouNote = currentNode
-			currentNode = b.head.nextNode
-			log.Println("currentNode:", currentNode)
+			currentNode = currentNode.nextNode
 		}
 
 		if found == false {
-			log.Println("Not found, assign to latest")
-			b.head.nextNode = newNode
+			currentNode.nextNode = newNode
 		}
 	}
+}
+
+func (b *basiclist) Search(key int) (interface{}, error) {
+	currentNode := b.head
+	for {
+		if currentNode.key == key {
+			return currentNode.val, nil
+		}
+
+		if currentNode.nextNode == nil {
+			break
+		}
+		currentNode = currentNode.nextNode
+	}
+	return nil, errors.New("Not found.")
+}
+
+func (b *basiclist) Remove(key int) error {
+	currentNode := b.head
+	var previouNote *basicnote
+	for {
+		if currentNode.key == key {
+			previouNote.nextNode = currentNode.nextNode
+			return nil
+		}
+
+		if currentNode.nextNode == nil {
+			break
+		}
+		previouNote = currentNode
+		currentNode = currentNode.nextNode
+	}
+	return errors.New("Not found key.")
 }
 
 func (b *basiclist) DisplayAll() {
 	fmt.Println("")
 	fmt.Printf("head->")
 	currentNode := b.head
-	for currentNode.nextNode != nil {
+	for {
 		fmt.Printf("[key:%d][val:%v]->", currentNode.key, currentNode.val)
+		if currentNode.nextNode == nil {
+			break
+		}
 		currentNode = currentNode.nextNode
 	}
 	fmt.Printf("nil\n")
