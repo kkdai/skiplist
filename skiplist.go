@@ -61,7 +61,6 @@ func (s *skiplist) randomLevel() int {
 //Search.
 func (b *skiplist) Search(searchKey int) (interface{}, error) {
 	currentNode := b.header
-	// fmt.Println("Head node level=", b.level)
 
 	//Start traversal forward first.
 	for i := b.level - 1; i >= 0; i-- {
@@ -85,7 +84,7 @@ func (b *skiplist) Insert(searchKey int, value interface{}) {
 	currentNode := b.header
 
 	//Quick search in forward list
-	for i := currentNode.level - 1; i >= 0; i-- {
+	for i := b.header.level - 1; i >= 0; i-- {
 		for currentNode.forward[i] != nil && currentNode.forward[i].key < searchKey {
 			currentNode = currentNode.forward[i]
 		}
@@ -103,7 +102,7 @@ func (b *skiplist) Insert(searchKey int, value interface{}) {
 			for i := b.level + 1; i <= newLevel; i++ {
 				updateList[i-1] = b.header
 			}
-			b.level = newLevel //This is not mention is pseudo code
+			b.level = newLevel //This is not mention in cookbook pseudo code
 			b.header.level = newLevel
 		}
 
@@ -120,7 +119,7 @@ func (b *skiplist) Delete(searchKey int) error {
 	currentNode := b.header
 
 	//Quick search in forward list
-	for i := currentNode.level - 1; i >= 0; i-- {
+	for i := b.header.level - 1; i >= 0; i-- {
 		for currentNode.forward[i] != nil && currentNode.forward[i].key < searchKey {
 			currentNode = currentNode.forward[i]
 		}
