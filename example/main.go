@@ -7,23 +7,29 @@ import (
 )
 
 func main() {
+	//New a skiplist
 	sl := skiplist.NewSkipList()
-	// sl.Insert(30, "string 1")
+
+	//Insert search key 50, value "5", value could be anything.
 	sl.Insert(50, "5")
 	sl.Insert(40, "4")
 	sl.Insert(70, "7")
 	sl.Insert(100, "10")
-	sl.Insert(10, "1")
-	sl.Insert(20, "2")
-	sl.Insert(30, "3")
-	sl.Insert(80, "8")
-	sl.Insert(90, "9")
-	sl.DisplayAll()
 
-	ret, err := sl.Search(70)
+	//Search key, which time complexity O(log n)
+	ret, err := sl.Search(50)
 	if err == nil {
-		fmt.Println("70->", ret)
+		fmt.Println("key 50: val->", ret)
 	} else {
 		fmt.Println("Not found, ", err)
 	}
+
+	//Delete by search key
+	err = sl.Delete(70)
+	if err != nil {
+		fmt.Println("Delete not found")
+	}
+
+	//Display all skip list content.
+	sl.DisplayAll()
 }

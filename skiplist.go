@@ -61,23 +61,11 @@ func (s *skiplist) randomLevel() int {
 //Search.
 func (b *skiplist) Search(searchKey int) (interface{}, error) {
 	currentNode := b.header
-	fmt.Println("Head node level=", b.level)
+	// fmt.Println("Head node level=", b.level)
 
 	//Start traversal forward first.
 	for i := b.level - 1; i >= 0; i-- {
-		//fmt.Printf("i=", i, ";")
-		fmt.Printf("Current node:[%d]", currentNode.key)
-		for j := currentNode.level - 1; j >= 0; j-- {
-			fmt.Printf(" fw[%d]:", j)
-			if currentNode.forward[j] != nil {
-				fmt.Printf("%d", currentNode.forward[j].key)
-			} else {
-				fmt.Printf("nil")
-			}
-		}
-		fmt.Println("next:", currentNode.forward[i])
 		for currentNode.forward[i] != nil && currentNode.forward[i].key < searchKey {
-			fmt.Println("Current node:", currentNode.key, " i=", i, " next:", currentNode.forward[i].key)
 			currentNode = currentNode.forward[i]
 		}
 	}
@@ -85,8 +73,6 @@ func (b *skiplist) Search(searchKey int) (interface{}, error) {
 	//Step to final search node.
 	currentNode = currentNode.forward[0]
 
-	//Found data
-	fmt.Println("Current node:", currentNode.key)
 	if currentNode.key == searchKey {
 		return currentNode.val, nil
 	}
@@ -113,7 +99,6 @@ func (b *skiplist) Insert(searchKey int, value interface{}) {
 		currentNode.val = value
 	} else {
 		newLevel := b.randomLevel()
-		// fmt.Println("newLevel:", newLevel)
 		if newLevel > b.level {
 			for i := b.level + 1; i <= newLevel; i++ {
 				updateList[i-1] = b.header
@@ -131,23 +116,37 @@ func (b *skiplist) Insert(searchKey int, value interface{}) {
 }
 
 func (b *skiplist) Delete(searchKey int) error {
-	//TODO. local update MaxLevel
-
+	updateList := make([]*skipnode, b.maxLevel)
 	currentNode := b.header
-	for i := b.maxLevel - 1; i <= 0; i-- {
-		for currentNode.forward[i].key < searchKey {
+
+	//Quick search in forward list
+	for i := currentNode.level - 1; i >= 0; i-- {
+		for currentNode.forward[i] != nil && currentNode.forward[i].key < searchKey {
 			currentNode = currentNode.forward[i]
 		}
-		//UPDATE[i] = currentNode
+		updateList[i] = currentNode
 	}
+
+	//Step to next node. (which is the target delete location)
 	currentNode = currentNode.forward[0]
 
 	if currentNode.key == searchKey {
-		for i := 1; i <= b.maxLevel; i++ {
-
+		for i := 0; i <= currentNode.level-1; i++ {
+			if updateList[i].forward[i] != nil && updateList[i].forward[i].key != currentNode.key {
+				break
+			}
+			updateList[i].forward[i] = currentNode.forward[i]
 		}
+
+		for currentNode.level > 1 && b.header.forward[currentNode.level] == nil {
+			currentNode.level--
+		}
+
+		//free(currentNode)  //no need for Golang because GC
+		currentNode = nil
+		return nil
 	}
-	return nil
+	return errors.New("Not found")
 }
 
 func (b *skiplist) DisplayAll() {
