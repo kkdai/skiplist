@@ -26,9 +26,11 @@ Usage
 
 ### Inspired By:
 
+- [Skip List bookbook](http://drum.lib.umd.edu/bitstream/handle/1903/544/CS-TR-2286.1.pdf)
 - [大数据日知录：架构与算法](http://product.dangdang.com/23561651.html)
 - [https://github.com/surge/skiplist](https://github.com/surge/skiplist)
-
+- [https://github.com/huandu/skiplist](https://github.com/huandu/skiplist)
+- [https://github.com/gansidui/skiplist](https://github.com/gansidui/skiplist)
 
 License
 ---------------
