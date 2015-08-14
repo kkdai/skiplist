@@ -150,8 +150,7 @@ func (b *skiplist) Delete(searchKey int) error {
 }
 
 func (b *skiplist) DisplayAll() {
-	fmt.Println("")
-	fmt.Printf("head->")
+	fmt.Printf("\nhead->")
 	currentNode := b.header
 
 	//Draw forward[0] base
