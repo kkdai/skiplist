@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	skiplist "../../go-skiplist"
+	skiplist "github.com/kkdai/skiplist"
 )
 
 func main() {
