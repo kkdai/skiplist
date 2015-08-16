@@ -6,7 +6,7 @@ import (
 	. "github.com/kkdai/skiplist"
 )
 
-func Example() {
+func Example_manuplateSkiplist() {
 	//New a skiplist
 	sl := NewSkipList()
 

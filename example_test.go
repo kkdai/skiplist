@@ -6,7 +6,7 @@ import (
 	. "github.com/kkdai/skiplist"
 )
 
-func Example_Insert() {
+func ExampleInsert() {
 	//New a skiplist
 	sl := NewSkipList()
 
@@ -14,7 +14,7 @@ func Example_Insert() {
 	sl.Insert(50, "5")
 }
 
-func Example_Search() {
+func ExampleSearch() {
 	//New a skiplist
 	sl := NewSkipList()
 
@@ -33,7 +33,7 @@ func Example_Search() {
 	}
 }
 
-func Example_Delete() {
+func ExampleDelete() {
 	//New a skiplist
 	sl := NewSkipList()
 
