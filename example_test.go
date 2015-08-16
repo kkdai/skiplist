@@ -1,4 +1,4 @@
-package skiplist
+package skiplist_test
 
 import (
 	"fmt"
