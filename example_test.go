@@ -9,6 +9,7 @@ import (
 func ExampleNewSkipList() {
 	//New a skiplist
 	sl := NewSkipList()
+	sl.DisplayAll()
 }
 
 func ExampleSkiplist_Insert() {
