@@ -37,7 +37,7 @@ const (
 	DefaultPropobility float32 = 0.50 //Default propobility
 )
 
-//NewSkipList : Init structure for basic Sorted Linked List.
+//NewSkipList : Init structure for Skit List.
 func NewSkipList() *Skiplist {
 	newList := &Skiplist{header: NewNode(0, "header", 1, DefaultMaxLevel), level: 1}
 	newList.maxLevel = DefaultMaxLevel       //default
@@ -58,7 +58,7 @@ func (s *Skiplist) randomLevel() int {
 	return level
 }
 
-//Search.
+//Search: Search a element by search key and return the interface{}
 func (b *Skiplist) Search(searchKey int) (interface{}, error) {
 	currentNode := b.header
 
@@ -78,7 +78,7 @@ func (b *Skiplist) Search(searchKey int) (interface{}, error) {
 	return nil, errors.New("Not found.")
 }
 
-//Insert.
+//Insert: Insert a search key and its value which could be interface.
 func (b *Skiplist) Insert(searchKey int, value interface{}) {
 	updateList := make([]*skipnode, b.maxLevel)
 	currentNode := b.header
@@ -114,6 +114,7 @@ func (b *Skiplist) Insert(searchKey int, value interface{}) {
 	}
 }
 
+//Delete: Delete element by search key
 func (b *Skiplist) Delete(searchKey int) error {
 	updateList := make([]*skipnode, b.maxLevel)
 	currentNode := b.header
@@ -148,6 +149,7 @@ func (b *Skiplist) Delete(searchKey int) error {
 	return errors.New("Not found")
 }
 
+//DisplayAll: Display current SkipList content in console, will also print out the linked pointer.
 func (b *Skiplist) DisplayAll() {
 	fmt.Printf("\nhead->")
 	currentNode := b.header
