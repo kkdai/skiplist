@@ -6,15 +6,7 @@ import (
 	. "github.com/kkdai/skiplist"
 )
 
-func Example_Insert() {
-	//New a skiplist
-	sl := NewSkipList()
-
-	//Insert search key 50, value "5", value could be anything.
-	sl.Insert(50, "5")
-}
-
-func Example_Search() {
+func Example() {
 	//New a skiplist
 	sl := NewSkipList()
 
@@ -31,18 +23,14 @@ func Example_Search() {
 	} else {
 		fmt.Println("Not found, ", err)
 	}
-}
-
-func Example_Delete() {
-	//New a skiplist
-	sl := NewSkipList()
-
-	//Insert search key 50, value "5", value could be anything.
-	sl.Insert(70, "7")
 
 	//Delete by search key
-	err := sl.Delete(70)
+	err = sl.Delete(70)
 	if err != nil {
 		fmt.Println("Delete not found")
 	}
+
+	//Display all skip list content.
+	sl.DisplayAll()
+
 }
