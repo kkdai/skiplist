@@ -23,7 +23,7 @@ func NewNode(searchKey int, value interface{}, createLevel int, maxLevel int) *s
 	return &skipnode{key: searchKey, val: value, forward: forwardEmpty, level: createLevel}
 }
 
-type skiplist struct {
+type Skiplist struct {
 	header *skipnode
 	//List configuration
 	maxLevel    int
@@ -38,8 +38,8 @@ const (
 )
 
 //NewSkipList : Init structure for basic Sorted Linked List.
-func NewSkipList() *skiplist {
-	newList := &skiplist{header: NewNode(0, "header", 1, DefaultMaxLevel), level: 1}
+func NewSkipList() *Skiplist {
+	newList := &Skiplist{header: NewNode(0, "header", 1, DefaultMaxLevel), level: 1}
 	newList.maxLevel = DefaultMaxLevel       //default
 	newList.propobility = DefaultPropobility //default
 	return newList
@@ -50,7 +50,7 @@ func randomP() float32 {
 	return rand.Float32()
 }
 
-func (s *skiplist) randomLevel() int {
+func (s *Skiplist) randomLevel() int {
 	level := 1
 	for randomP() < s.propobility && level < s.maxLevel {
 		level++
@@ -59,7 +59,7 @@ func (s *skiplist) randomLevel() int {
 }
 
 //Search.
-func (b *skiplist) Search(searchKey int) (interface{}, error) {
+func (b *Skiplist) Search(searchKey int) (interface{}, error) {
 	currentNode := b.header
 
 	//Start traversal forward first.
@@ -79,7 +79,7 @@ func (b *skiplist) Search(searchKey int) (interface{}, error) {
 }
 
 //Insert.
-func (b *skiplist) Insert(searchKey int, value interface{}) {
+func (b *Skiplist) Insert(searchKey int, value interface{}) {
 	updateList := make([]*skipnode, b.maxLevel)
 	currentNode := b.header
 
@@ -114,7 +114,7 @@ func (b *skiplist) Insert(searchKey int, value interface{}) {
 	}
 }
 
-func (b *skiplist) Delete(searchKey int) error {
+func (b *Skiplist) Delete(searchKey int) error {
 	updateList := make([]*skipnode, b.maxLevel)
 	currentNode := b.header
 
@@ -148,7 +148,7 @@ func (b *skiplist) Delete(searchKey int) error {
 	return errors.New("Not found")
 }
 
-func (b *skiplist) DisplayAll() {
+func (b *Skiplist) DisplayAll() {
 	fmt.Printf("\nhead->")
 	currentNode := b.header
 
