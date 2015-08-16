@@ -9,12 +9,17 @@ import (
 func ExampleNewSkipList() {
 	//New a skiplist
 	sl := NewSkipList()
+}
+
+func ExampleSkiplist_Insert() {
+	//New a skiplist
+	sl := NewSkipList()
 
 	//Insert search key 50, value "5", value could be anything.
 	sl.Insert(50, "5")
 }
 
-func ExampleSearch() {
+func ExampleSkiplist_Search() {
 	//New a skiplist
 	sl := NewSkipList()
 
@@ -33,7 +38,7 @@ func ExampleSearch() {
 	}
 }
 
-func ExampleDelete() {
+func ExampleSkiplist_Delete() {
 	//New a skiplist
 	sl := NewSkipList()
 
