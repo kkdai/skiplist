@@ -7,29 +7,29 @@ import (
 	"time"
 )
 
-type skipnode struct {
-	key     int
-	val     interface{}
-	forward []*skipnode
-	level   int
+type Skipnode struct {
+	Key     int
+	Val     interface{}
+	Forward []*Skipnode
+	Level   int
 }
 
-func NewNode(searchKey int, value interface{}, createLevel int, maxLevel int) *skipnode {
+func NewNode(searchKey int, value interface{}, createLevel int, maxLevel int) *Skipnode {
 	//Every forward prepare a maxLevel empty point first.
-	forwardEmpty := make([]*skipnode, maxLevel)
+	forwardEmpty := make([]*Skipnode, maxLevel)
 	for i := 0; i <= maxLevel-1; i++ {
 		forwardEmpty[i] = nil
 	}
-	return &skipnode{key: searchKey, val: value, forward: forwardEmpty, level: createLevel}
+	return &Skipnode{Key: searchKey, Val: value, Forward: forwardEmpty, Level: createLevel}
 }
 
 type Skiplist struct {
-	header *skipnode
+	Header *Skipnode
 	//List configuration
-	maxLevel    int
-	propobility float32
+	MaxLevel    int
+	Propobility float32
 	//List status
-	level int //current level of whole skiplist
+	Level int //current level of whole skiplist
 }
 
 const (
@@ -39,9 +39,9 @@ const (
 
 //NewSkipList : Init structure for Skit List.
 func NewSkipList() *Skiplist {
-	newList := &Skiplist{header: NewNode(0, "header", 1, DefaultMaxLevel), level: 1}
-	newList.maxLevel = DefaultMaxLevel       //default
-	newList.propobility = DefaultPropobility //default
+	newList := &Skiplist{Header: NewNode(0, "header", 1, DefaultMaxLevel), Level: 1}
+	newList.MaxLevel = DefaultMaxLevel       //default
+	newList.Propobility = DefaultPropobility //default
 	return newList
 }
 
@@ -50,9 +50,14 @@ func randomP() float32 {
 	return rand.Float32()
 }
 
-func (s *Skiplist) randomLevel() int {
+//Change SkipList default maxlevel is 4.
+func (b *Skiplist) SetMaxLevel(maxLevel int) {
+	b.MaxLevel = maxLevel
+}
+
+func (b *Skiplist) RandomLevel() int {
 	level := 1
-	for randomP() < s.propobility && level < s.maxLevel {
+	for randomP() < b.Propobility && level < b.MaxLevel {
 		level++
 	}
 	return level
@@ -60,86 +65,86 @@ func (s *Skiplist) randomLevel() int {
 
 //Search: Search a element by search key and return the interface{}
 func (b *Skiplist) Search(searchKey int) (interface{}, error) {
-	currentNode := b.header
+	currentNode := b.Header
 
 	//Start traversal forward first.
-	for i := b.level - 1; i >= 0; i-- {
-		for currentNode.forward[i] != nil && currentNode.forward[i].key < searchKey {
-			currentNode = currentNode.forward[i]
+	for i := b.Level - 1; i >= 0; i-- {
+		for currentNode.Forward[i] != nil && currentNode.Forward[i].Key < searchKey {
+			currentNode = currentNode.Forward[i]
 		}
 	}
 
 	//Step to final search node.
-	currentNode = currentNode.forward[0]
+	currentNode = currentNode.Forward[0]
 
-	if currentNode.key == searchKey {
-		return currentNode.val, nil
+	if currentNode.Key == searchKey {
+		return currentNode.Val, nil
 	}
 	return nil, errors.New("Not found.")
 }
 
 //Insert: Insert a search key and its value which could be interface.
 func (b *Skiplist) Insert(searchKey int, value interface{}) {
-	updateList := make([]*skipnode, b.maxLevel)
-	currentNode := b.header
+	updateList := make([]*Skipnode, b.MaxLevel)
+	currentNode := b.Header
 
 	//Quick search in forward list
-	for i := b.header.level - 1; i >= 0; i-- {
-		for currentNode.forward[i] != nil && currentNode.forward[i].key < searchKey {
-			currentNode = currentNode.forward[i]
+	for i := b.Header.Level - 1; i >= 0; i-- {
+		for currentNode.Forward[i] != nil && currentNode.Forward[i].Key < searchKey {
+			currentNode = currentNode.Forward[i]
 		}
 		updateList[i] = currentNode
 	}
 
 	//Step to next node. (which is the target insert location)
-	currentNode = currentNode.forward[0]
+	currentNode = currentNode.Forward[0]
 
-	if currentNode != nil && currentNode.key == searchKey {
-		currentNode.val = value
+	if currentNode != nil && currentNode.Key == searchKey {
+		currentNode.Val = value
 	} else {
-		newLevel := b.randomLevel()
-		if newLevel > b.level {
-			for i := b.level + 1; i <= newLevel; i++ {
-				updateList[i-1] = b.header
+		newLevel := b.RandomLevel()
+		if newLevel > b.Level {
+			for i := b.Level + 1; i <= newLevel; i++ {
+				updateList[i-1] = b.Header
 			}
-			b.level = newLevel //This is not mention in cookbook pseudo code
-			b.header.level = newLevel
+			b.Level = newLevel //This is not mention in cookbook pseudo code
+			b.Header.Level = newLevel
 		}
 
-		newNode := NewNode(searchKey, value, newLevel, b.maxLevel) //New node
+		newNode := NewNode(searchKey, value, newLevel, b.MaxLevel) //New node
 		for i := 0; i <= newLevel-1; i++ {                         //zero base
-			newNode.forward[i] = updateList[i].forward[i]
-			updateList[i].forward[i] = newNode
+			newNode.Forward[i] = updateList[i].Forward[i]
+			updateList[i].Forward[i] = newNode
 		}
 	}
 }
 
 //Delete: Delete element by search key
 func (b *Skiplist) Delete(searchKey int) error {
-	updateList := make([]*skipnode, b.maxLevel)
-	currentNode := b.header
+	updateList := make([]*Skipnode, b.MaxLevel)
+	currentNode := b.Header
 
 	//Quick search in forward list
-	for i := b.header.level - 1; i >= 0; i-- {
-		for currentNode.forward[i] != nil && currentNode.forward[i].key < searchKey {
-			currentNode = currentNode.forward[i]
+	for i := b.Header.Level - 1; i >= 0; i-- {
+		for currentNode.Forward[i] != nil && currentNode.Forward[i].Key < searchKey {
+			currentNode = currentNode.Forward[i]
 		}
 		updateList[i] = currentNode
 	}
 
 	//Step to next node. (which is the target delete location)
-	currentNode = currentNode.forward[0]
+	currentNode = currentNode.Forward[0]
 
-	if currentNode.key == searchKey {
-		for i := 0; i <= currentNode.level-1; i++ {
-			if updateList[i].forward[i] != nil && updateList[i].forward[i].key != currentNode.key {
+	if currentNode.Key == searchKey {
+		for i := 0; i <= currentNode.Level-1; i++ {
+			if updateList[i].Forward[i] != nil && updateList[i].Forward[i].Key != currentNode.Key {
 				break
 			}
-			updateList[i].forward[i] = currentNode.forward[i]
+			updateList[i].Forward[i] = currentNode.Forward[i]
 		}
 
-		for currentNode.level > 1 && b.header.forward[currentNode.level] == nil {
-			currentNode.level--
+		for currentNode.Level > 1 && b.Header.Forward[currentNode.Level] == nil {
+			currentNode.Level--
 		}
 
 		//free(currentNode)  //no need for Golang because GC
@@ -152,38 +157,38 @@ func (b *Skiplist) Delete(searchKey int) error {
 //DisplayAll: Display current SkipList content in console, will also print out the linked pointer.
 func (b *Skiplist) DisplayAll() {
 	fmt.Printf("\nhead->")
-	currentNode := b.header
+	currentNode := b.Header
 
 	//Draw forward[0] base
 	for {
-		fmt.Printf("[key:%d][val:%v]->", currentNode.key, currentNode.val)
-		if currentNode.forward[0] == nil {
+		fmt.Printf("[key:%d][val:%v]->", currentNode.Key, currentNode.Val)
+		if currentNode.Forward[0] == nil {
 			break
 		}
-		currentNode = currentNode.forward[0]
+		currentNode = currentNode.Forward[0]
 	}
 	fmt.Printf("nil\n")
 
 	fmt.Println("---------------------------------------------------------")
-	currentNode = b.header
+	currentNode = b.Header
 	//Draw all data node.
 	for {
-		fmt.Printf("[node:%d], val:%v, level:%d ", currentNode.key, currentNode.val, currentNode.level)
+		fmt.Printf("[node:%d], val:%v, level:%d ", currentNode.Key, currentNode.Val, currentNode.Level)
 
-		if currentNode.forward[0] == nil {
+		if currentNode.Forward[0] == nil {
 			break
 		}
 
-		for j := currentNode.level - 1; j >= 0; j-- {
+		for j := currentNode.Level - 1; j >= 0; j-- {
 			fmt.Printf(" fw[%d]:", j)
-			if currentNode.forward[j] != nil {
-				fmt.Printf("%d", currentNode.forward[j].key)
+			if currentNode.Forward[j] != nil {
+				fmt.Printf("%d", currentNode.Forward[j].Key)
 			} else {
 				fmt.Printf("nil")
 			}
 		}
 		fmt.Printf("\n")
-		currentNode = currentNode.forward[0]
+		currentNode = currentNode.Forward[0]
 	}
 	fmt.Printf("\n")
 }
