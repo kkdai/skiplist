@@ -3,7 +3,7 @@ package skiplist_test
 import (
 	"testing"
 
-	. "../go-skiplist"
+	. "github.com/kkdai/skiplist"
 )
 
 func TestRandomMaxLevel(t *testing.T) {
