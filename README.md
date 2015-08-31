@@ -22,6 +22,14 @@ Usage
 
 ```go
 
+    package main
+    
+    import (
+	"fmt"
+	
+	. "github.com/kkdai/skiplist"
+    )
+
     func main() {
         //New a skiplist
         sl := skiplist.NewSkipList()
