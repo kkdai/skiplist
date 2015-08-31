@@ -20,6 +20,8 @@ Install
 Usage
 ---------------
 
+```go
+
     func main() {
         //New a skiplist
         sl := skiplist.NewSkipList()
@@ -54,7 +56,7 @@ Usage
     //[node:50], val:5, level:2  fw[1]:100 fw[0]:100
     //[node:100], val:10, level:2
     }    
-
+```
 
 ### Inspired By:
 
