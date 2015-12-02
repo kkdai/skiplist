@@ -75,6 +75,16 @@ Usage
 - [https://github.com/huandu/skiplist](https://github.com/huandu/skiplist)
 - [https://github.com/gansidui/skiplist](https://github.com/gansidui/skiplist)
 
+Benchmark
+---------------
+
+Here is the benchmark list:
+
+```
+BenchmarkInsert-4	  100000	     20197 ns/op
+BenchmarkSearch-4	 5000000	       329 ns/op
+```
+
 Project52
 ---------------
 

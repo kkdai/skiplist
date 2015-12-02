@@ -8,13 +8,13 @@ import (
 )
 
 type Skipnode struct {
-	Key     int
+	Key     uint32
 	Val     interface{}
 	Forward []*Skipnode
 	Level   int
 }
 
-func NewNode(searchKey int, value interface{}, createLevel int, maxLevel int) *Skipnode {
+func NewNode(searchKey uint32, value interface{}, createLevel int, maxLevel int) *Skipnode {
 	//Every forward prepare a maxLevel empty point first.
 	forwardEmpty := make([]*Skipnode, maxLevel)
 	for i := 0; i <= maxLevel-1; i++ {
@@ -33,8 +33,8 @@ type Skiplist struct {
 }
 
 const (
-	DefaultMaxLevel    int     = 4    //Maximal level allow to create in this skip list
-	DefaultPropobility float32 = 0.50 //Default propobility
+	DefaultMaxLevel    int     = 15   //Maximal level allow to create in this skip list
+	DefaultPropobility float32 = 0.25 //Default propobility
 )
 
 //NewSkipList : Init structure for Skit List.
@@ -64,7 +64,7 @@ func (b *Skiplist) RandomLevel() int {
 }
 
 //Search: Search a element by search key and return the interface{}
-func (b *Skiplist) Search(searchKey int) (interface{}, error) {
+func (b *Skiplist) Search(searchKey uint32) (interface{}, error) {
 	currentNode := b.Header
 
 	//Start traversal forward first.
@@ -77,14 +77,14 @@ func (b *Skiplist) Search(searchKey int) (interface{}, error) {
 	//Step to final search node.
 	currentNode = currentNode.Forward[0]
 
-	if currentNode.Key == searchKey {
+	if currentNode != nil && currentNode.Key == searchKey {
 		return currentNode.Val, nil
 	}
 	return nil, errors.New("Not found.")
 }
 
 //Insert: Insert a search key and its value which could be interface.
-func (b *Skiplist) Insert(searchKey int, value interface{}) {
+func (b *Skiplist) Insert(searchKey uint32, value interface{}) {
 	updateList := make([]*Skipnode, b.MaxLevel)
 	currentNode := b.Header
 
@@ -120,7 +120,7 @@ func (b *Skiplist) Insert(searchKey int, value interface{}) {
 }
 
 //Delete: Delete element by search key
-func (b *Skiplist) Delete(searchKey int) error {
+func (b *Skiplist) Delete(searchKey uint32) error {
 	updateList := make([]*Skipnode, b.MaxLevel)
 	currentNode := b.Header
 
