@@ -80,6 +80,9 @@ Benchmark
 
 Here is the benchmark list:
 
+**Note**: The slice search op base on worst case.
+
+
 ```
 BenchmarkSkiplistSearch-4	10000000	       137 ns/op
 BenchmarkSkiplistInsert-4	  100000	     20881 ns/op
