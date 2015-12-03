@@ -83,14 +83,19 @@ Here is the benchmark list:
 **Note**: The slice search op base on worst case.
 
 
+
 ```
-BenchmarkSkiplistSearch-4	10000000	       137 ns/op
-BenchmarkSkiplistInsert-4	  100000	     20881 ns/op
-BenchmarkSliceInsert-4   	100000000	        34.4 ns/op
+//Slice Operations
+BenchmarkSliceInsert-4   	100000000	      34.4 ns/op
 BenchmarkSliceSearch-4   	   20000	     80149 ns/op
 
+//Sliplist Operations
+BenchmarkSkiplistInsert-4	  100000	     20881 ns/op
+BenchmarkSkiplistSearch-4	10000000	       137 ns/op
+
 ```
 
+*It is very obviousily the skiplist search is much faster than slice iterator.*
 
 Project52
 ---------------
