@@ -83,15 +83,6 @@ func TestDeleteBig(t *testing.T) {
 	}
 }
 
-func BenchmarkInsert(b *testing.B) {
-	sl := NewSkipList()
-	b.ResetTimer()
-	var i uint32
-	for i = 0; i < uint32(b.N); i++ {
-		sl.Insert(i, i)
-	}
-}
-
 /* Bigger than 25868 times delete might cause error
 func BenchmarkDelete(b *testing.B) {
 	sl := NewSkipList()
@@ -108,7 +99,7 @@ func BenchmarkDelete(b *testing.B) {
 }
 */
 
-func BenchmarkSearch(b *testing.B) {
+func BenchmarkSkiplistSearch(b *testing.B) {
 	sl := NewSkipList()
 	var i uint32
 	for i = 0; i < 100000; i++ {
@@ -118,5 +109,42 @@ func BenchmarkSearch(b *testing.B) {
 	b.ResetTimer()
 	for i = 0; i < uint32(b.N); i++ {
 		sl.Search(i)
+	}
+}
+
+func BenchmarkSkiplistInsert(b *testing.B) {
+	sl := NewSkipList()
+	b.ResetTimer()
+	var i uint32
+	for i = 0; i < uint32(b.N); i++ {
+		sl.Insert(i, i)
+	}
+}
+
+func BenchmarkSliceInsert(b *testing.B) {
+	var sl []uint32
+	b.ResetTimer()
+	var i uint32
+	for i = 0; i < uint32(b.N); i++ {
+		sl = append(sl, i)
+	}
+}
+
+func BenchmarkSliceSearch(b *testing.B) {
+	var sl []uint32
+	var i uint32
+	for i = 0; i < 100000; i++ {
+		sl = append(sl, i)
+	}
+
+	var ret int
+	b.ResetTimer()
+	for i = 0; i < uint32(b.N); i++ {
+		for k, v := range sl {
+			if v == i {
+				ret = k
+				ret = ret + 1
+			}
+		}
 	}
 }

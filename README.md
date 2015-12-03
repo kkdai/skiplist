@@ -81,9 +81,13 @@ Benchmark
 Here is the benchmark list:
 
 ```
-BenchmarkInsert-4	  100000	     20197 ns/op
-BenchmarkSearch-4	 5000000	       329 ns/op
+BenchmarkSkiplistSearch-4	10000000	       137 ns/op
+BenchmarkSkiplistInsert-4	  100000	     20881 ns/op
+BenchmarkSliceInsert-4   	100000000	        34.4 ns/op
+BenchmarkSliceSearch-4   	   20000	     80149 ns/op
+
 ```
+
 
 Project52
 ---------------
