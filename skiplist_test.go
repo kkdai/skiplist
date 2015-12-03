@@ -99,6 +99,15 @@ func BenchmarkDelete(b *testing.B) {
 }
 */
 
+func BenchmarkSkiplistInsert(b *testing.B) {
+	sl := NewSkipList()
+	b.ResetTimer()
+	var i uint32
+	for i = 0; i < uint32(b.N); i++ {
+		sl.Insert(i, i)
+	}
+}
+
 func BenchmarkSkiplistSearch(b *testing.B) {
 	sl := NewSkipList()
 	var i uint32
@@ -109,15 +118,6 @@ func BenchmarkSkiplistSearch(b *testing.B) {
 	b.ResetTimer()
 	for i = 0; i < uint32(b.N); i++ {
 		sl.Search(i)
-	}
-}
-
-func BenchmarkSkiplistInsert(b *testing.B) {
-	sl := NewSkipList()
-	b.ResetTimer()
-	var i uint32
-	for i = 0; i < uint32(b.N); i++ {
-		sl.Insert(i, i)
 	}
 }
 
@@ -146,5 +146,28 @@ func BenchmarkSliceSearch(b *testing.B) {
 				ret = ret + 1
 			}
 		}
+	}
+}
+func BenchmarkMapInsert(b *testing.B) {
+	sl := make(map[uint32]uint32)
+	b.ResetTimer()
+	var i uint32
+	for i = 0; i < uint32(b.N); i++ {
+		sl[i] = i
+	}
+}
+
+func BenchmarkMapSearch(b *testing.B) {
+	sl := make(map[uint32]uint32)
+	var i uint32
+	for i = 0; i < 100000; i++ {
+		sl[i] = i
+	}
+
+	var ret uint32
+	b.ResetTimer()
+	for i = 0; i < uint32(b.N); i++ {
+		ret = sl[i]
+		ret = ret + 1
 	}
 }
